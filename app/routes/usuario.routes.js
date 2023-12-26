@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const userControllers = require("../controllers/user.controllers.js")
 
 
-router.get('/', (req, res) => {
-  res.json({code: 200, message:"Listado de usuarios."});
-})
+router.get('/', userControllers.findAllUsuarios);
+
+router.post('/', userControllers.addUsuario)
+
 
 module.exports = router;

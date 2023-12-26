@@ -1,0 +1,94 @@
+<h1 class="text-center">Vista principal</h1>
+
+<section>
+    <form id="addUsuario">
+        <div>
+            <p>Datos de usuario:</p>
+            nombre: <input type="text" name="nombre" id="nombre" required>
+            apellido: <input type="text" name="apellido" id="apellido" required>
+            email: <input type="email" name="email" id="email" required>
+            password: <input type="password" name="password" id="password" required> 
+        </div>
+        <div>
+            <p>Datos de dirección:</p>
+            calle:  <input type="text" name="calle" id="calle" required>
+            numeracion:  <input type="text" name="numeracion" id="numeracion" required>
+            comuna: <input type="text" name="comuna" id="comuna" required>
+            ciudad: <input type="text" name="ciudad" id="ciudad" required>
+        </div>
+        <input type="submit" value="Crear" class="btn btn-primary">
+    </form>
+</section>
+
+<section>
+    <h2 class="text-center py-4">Lista de usuarios registrados.</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Apellido</th>
+                <th scope="col">Direccion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each usuarios}}
+            <tr>
+                <th scope="row">{{id}}</th>
+                <td>{{nombre}}</td>
+                <td>{{apellido}}</td>
+                <td>{{direccion.calle}} #{{direccion.numeracion}}, {{direccion.comuna}}, {{direccion.ciudad}}</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</section>
+
+<style>
+    #addUsuario input {
+        display: block;
+    }
+
+     #addUsuario div {
+        border: 1px solid black;
+        margin-bottom: 5px;
+        padding: 16px;
+     }
+
+      #addUsuario p {
+        text-decoration: underline;
+     }
+
+</style>
+
+
+<script>
+    const addUsuario = document.getElementById("addUsuario");
+
+    addUsuario.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        try{
+
+            let datos = new FormData(addUsuario);
+
+            let response = await fetch("/api/v1/usuarios", {
+                method: "POST",
+                body: datos
+            });
+
+            let dataApi = await response.json();
+
+            if(dataApi.code == 201){
+                alert(dataApi.message);
+                location.reload();
+            }else {
+                alert(dataApi.message);
+            }
+
+        } catch(error){
+            console.log(error);
+            alert("Error al conectarse a la base de datos.")
+        }
+    })
+</script>
