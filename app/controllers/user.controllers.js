@@ -45,7 +45,30 @@ const addUsuario = async (req, res) => {
     }
 };
 
+const eliminarUsuario = async (req, res) => {
+    try {
+
+        if(!req.autenticado){
+            return res.status(401).json({code: 401, message: "Usted no tiene los permisos necesarios para eliminar la cuenta."})
+        }
+
+        //VERIFICAR SI EL USUARIO USUARIO ES EL MISMO QUE EL USUARIO QUE SE DESEA ELIMINAR
+
+        let usuario = await Usuario.findByPk(req.autenticado.id);
+        
+        if(usuario){
+            await usuario.destroy();
+            res.status(200).json({code: 200, message: "usuario eliminado con éxito"});
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({code: 500, message: "Error al intentar eliminar un usuario."});
+    }
+};
+
 module.exports = {
     findAllUsuarios,
-    addUsuario
+    addUsuario,
+    eliminarUsuario
 }

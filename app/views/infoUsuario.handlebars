@@ -1,11 +1,65 @@
 <h1 class="text-center mt-5">Vista detalles de usuario: {{usuario.nombre}}</h1>
 
 <section class="datosPublicos">
+    <h5>datos de Personales:</h5>
     <p><b>Nombre:</b> {{usuario.nombre}}</p>
     <p><b>Apellido:</b> {{usuario.apellido}}</p>
     <p><b>Email:</b> {{usuario.email}}</p>
 </section>
-
+<hr>
+{{#if autenticado}}
 <section class="datosPrivados">
-    
+    {{#if direccion}}
+    <div>
+        <h5>datos de direccion:</h5>
+        <p><b>Calle:</b> {{direccion.calle}}</p>
+        <p><b>Numeracion:</b> {{direccion.numeracion}}</p>
+        <p><b>Comuna:</b> {{direccion.comuna}}</p>
+        <p><b>Ciudad:</b> {{direccion.ciudad}}</p>
+
+    </div>
+    {{/if}}
+
+    <button class="btn btn-danger" id="btnEliminarCuenta">Eliminar Cuenta</button>
 </section>
+{{/if}}
+
+<style>
+    h5{
+        text-decoration: underline;
+    }
+</style>
+
+
+<script>
+    const btnEliminarCuenta = document.getElementById("btnEliminarCuenta");
+
+    if(btnEliminarCuenta){
+        btnEliminarCuenta.addEventListener("click", async () => {
+            try{
+                
+                let token = localStorage.getItem("token");
+
+                const myHeaders = new Headers();
+                myHeaders.append("Authorization", `Bearer ${token}`);
+                let response = await fetch("/api/v1/usuarios", {
+                    method: "DELETE",
+                    headers: myHeaders
+                });
+
+                let data = await response.json();
+
+                if(data.code == 200){
+                    alert(data.message);
+                    localStorage.clear();
+                    location.href = "/";
+                }
+
+            }catch(error){
+                console.log(error);
+                console.log("Error al intentar eliminar la cuenta")
+            }
+        })
+    }
+
+</script>

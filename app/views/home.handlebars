@@ -39,7 +39,7 @@
                 <td>{{nombre}}</td>
                 <td>{{apellido}}</td>
                 {{!-- <td>{{direccion.calle}} #{{direccion.numeracion}}, {{direccion.comuna}}, {{direccion.ciudad}}</td> --}}
-                <td><a class="btn btn-info" href="/infoUsuario/{{id}}">Ver detalles</a></td>
+                <td><a class="btn btn-info linksDetalles" href="/infoUsuario/{{id}}">Ver detalles</a></td>
             </tr>
             {{/each}}
         </tbody>
@@ -92,5 +92,22 @@
             console.log(error);
             alert("Error al conectarse a la base de datos.")
         }
+    });
+
+    //ACCIONES PARA LOS BOTONES QUE VEN DETALLES DE LOS USUARIOS
+
+    let linksDetalles = document.getElementsByClassName("linksDetalles");
+    linksDetalles = [...linksDetalles],
+
+    linksDetalles.forEach(link => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            let path = link.href;
+            let token = localStorage.getItem("token");
+            if(token){
+                path+= `?token=${token}`;
+            }
+            location.href = path;
+        })
     })
 </script>

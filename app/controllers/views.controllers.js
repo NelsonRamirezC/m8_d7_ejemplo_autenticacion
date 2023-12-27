@@ -44,11 +44,27 @@ const viewInfoUsuario = async (req, res) => {
 
         let usuario = await Usuario.findByPk(id);
         usuario = usuario.toJSON();
-        console.log(usuario);
+        
+        if(req.autenticado && req.autenticado.id == usuario.id){
+            let direccion = await Direccion.findOne({
+                where: {
+                    id_usuario: usuario.id
+                }
+            });
+
+            direccion = direccion.toJSON();
+
+            return res.render("infoUsuario", {
+                usuario,
+                direccion,
+                autenticado: true
+            });
+        }
 
         res.render("infoUsuario", {
             usuario
         });
+
     }catch(error){
         res.render("infoUsuario", {
             error: "Error al cargar los datos."

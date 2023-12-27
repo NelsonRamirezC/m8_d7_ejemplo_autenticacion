@@ -34,6 +34,12 @@
 
             if(data.code == 200){
                 alert(data.message);
+
+                //GUARDAR EL TOKEN EN EL LOCALSTORAGE
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("usuario", JSON.stringify(data.usuario));
+                location.href = "/";
+
             }else {
                 alert(data.message);
             }
