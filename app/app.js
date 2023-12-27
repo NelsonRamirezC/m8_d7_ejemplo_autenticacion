@@ -4,13 +4,14 @@ const path = require("path");
 const fileUpload = require("express-fileupload");
 const usuariosRoutes = require("./routes/usuario.routes.js")
 const viewsRoutes = require("./routes/views.routes.js")
+const loginRoutes = require("./routes/login.routes.js")
 
 
 const app = express();
 
 //MIDDLEWARES GENERALES
 app.use(express.json());
-app.use(fileUpload());
+app.use(fileUpload()); //req.body
 
 
 //CONFIGURACIÓN HANDLEBARS
@@ -32,6 +33,9 @@ app.use("/api/v1/usuarios", usuariosRoutes);
 
 //RUTAS DEL FRONTEND
 app.use("/", viewsRoutes);
+
+//RUTA DE LOGIN
+app.use("/login", loginRoutes);
 
 app.all("*", (req, res) => {
     res.status(404).json({code: 404, message: "Ruta no conocida."});

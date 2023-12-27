@@ -1,0 +1,47 @@
+<h1 class="text-center mt-5">Vista Login</h1>
+
+<section class="mx-auto col-6">
+    <form id="formLogin">
+        <div class="py-2">
+            correo: <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="py-2">
+            password: <input type="password" name="password" class="form-control" required>
+        </div>
+        <input type="submit" value="Login" class="btn btn-primary">
+    </form>
+</section>
+
+<script>
+    const formLogin = document.getElementById("formLogin");
+
+    formLogin.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        try{
+
+            let credenciales = new FormData(formLogin);
+            
+            let response = await fetch("/login", {
+                method: "POST",
+                body: credenciales 
+            });
+            
+
+            let data = await response.json();
+
+            console.log(data);
+
+            if(data.code == 200){
+                alert(data.message);
+            }else {
+                alert(data.message);
+            }
+
+
+        }catch(error){
+            console.log(error);
+            alert("Ha ocurrido un error en el proceso de login.")
+        }
+    })
+</script>

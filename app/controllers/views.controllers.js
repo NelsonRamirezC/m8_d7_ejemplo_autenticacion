@@ -27,6 +27,37 @@ const viewHome = async (req, res) => {
     }
 };
 
+
+const viewLogin = (req, res) => {
+    try{
+        res.render("login");
+    }catch(error){
+        res.render("login", {
+            error: "Error al cargar los datos."
+        });
+    }
+}
+
+const viewInfoUsuario = async (req, res) => {
+    try{
+        let id = req.params.id;
+
+        let usuario = await Usuario.findByPk(id);
+        usuario = usuario.toJSON();
+        console.log(usuario);
+
+        res.render("infoUsuario", {
+            usuario
+        });
+    }catch(error){
+        res.render("infoUsuario", {
+            error: "Error al cargar los datos."
+        });
+    }
+}
+
 module.exports = {
-    viewHome
+    viewHome,
+    viewLogin,
+    viewInfoUsuario 
 }
