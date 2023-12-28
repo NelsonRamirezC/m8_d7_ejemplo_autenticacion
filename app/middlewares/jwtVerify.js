@@ -7,7 +7,10 @@ const verificarToken = (req, res, next) => {
 
         if(!token){
             //si no existe token url, verificar si viene en el encabezado
-            token = req.headers.authorization.split(" ")[1];
+            token = req.headers?.authorization;
+            if(token){
+                token = token.split(" ")[1];
+            }
         }
 
         if(token){

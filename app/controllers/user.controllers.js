@@ -1,5 +1,6 @@
 const Usuario = require("../models/Usuario.model.js");
 const Direccion = require("../models/Direccion.model.js");
+const bcrypt = require("bcrypt");
 
 const findAllUsuarios = async (req, res) => {
     try {
@@ -26,8 +27,13 @@ const addUsuario = async (req, res) => {
     try {
         let {nombre, apellido, email, password, calle, numeracion, comuna, ciudad} = req.body;
 
-        let usuario = await Usuario.create({
-            nombre, apellido, email, password,
+        /* inicio proceso de cifrado */
+        const salt = await bcrypt.genSalt(10);
+        const cryptedPassword = await bcrypt.hash(password, salt);
+        /* fin proceso de cifrado */
+
+       let usuario = await Usuario.create({
+            nombre, apellido, email, password: cryptedPassword,
             direccion: {
                 calle, numeracion, comuna, ciudad
             }
@@ -38,6 +44,7 @@ const addUsuario = async (req, res) => {
             }
         });
 
+    
         res.status(201).json({code: 201, message: "Usuario creado con éxito", usuario});
     } catch (error) {
         console.log(error);
